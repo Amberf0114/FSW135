@@ -1,5 +1,4 @@
 const express = require('express')
-const { monitorEventLoopDelay } = require('perf_hooks')
 const inventoryRouter = express.Router()
 const inventory = require('../models/inventory.js')
 
@@ -29,7 +28,7 @@ inventoryRouter
 
 inventoryRouter 
 
-    .get('search/food', (req, res, next) => {
+    .get('/:productId', (req, res, next) => {  // note>>> : = param
         // const food = req.query.food
         // if(!food){
         //     const err = new Error('Please specify a food')
@@ -38,7 +37,7 @@ inventoryRouter
         // }
         // const filteredInventory = inventory.filter(product => product.food === food)
         // res.status(200).json(filteredInventory)
-        inventory.findOne({_id: req.params._id}, (err, foundProduct) => {
+        inventory.findOne({_id: req.params.productId}, (err, foundProduct) => {
             if (err) {
                 res.status(500)
                 return console.log(err)
