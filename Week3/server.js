@@ -18,7 +18,7 @@ mongoose.connect('mongodb://localhost:27017/authdb',
   () => console.log("Connected to the DB")
 )
 
-PORT = 3000
+var PORT = 3001
 
 app.use('/auth', authRouter)
 
