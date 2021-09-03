@@ -10,6 +10,7 @@ const IssueSchema = new Schema ({
         type: String,
         required: true
     }
+
 })
 
 module.exports = mongoose.model('IssueModel', IssueSchema)

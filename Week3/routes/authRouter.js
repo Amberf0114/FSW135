@@ -1,11 +1,10 @@
 const express = require('express')
 const authRouter = express.Router()
 const comment = require('../models/comment.js')
-const issue = require('../models/issue.js')
 const user = require('../models/user.js')
 
 authRouter
-    //Gett All Issues
+    //Get All Issues
     .get('/',(req, res, next) => {
         issue.find((err, issue) => {
             if(err){
@@ -70,21 +69,7 @@ authRouter
             })
         })
 
-        //Edit a Comment -----needs a separate ID
-        .put('/:commentId', (req,res, next) => {
-            comment.findOneAndUpdate(
-                {_id: req.params.commentId},
-                req.body,
-                {new: true},
-                (err, updatedComment) => {
-                    if (err) {
-                        res.status(500)
-                        return console.log(err)
-                    }
-                    return res.status(200).json(updatedComment)
-                }
-            )
-        })
+
         //Delete an Issue
         .delete('/:issueId', (req, res, next) => {
             issue.findOneAndDelete({_id: req.params.issueId }, (err, deletedIssue) => {
@@ -98,6 +83,6 @@ authRouter
             })
         })
 
-        //Delete a Comment
+
 
     module.exports = authRouter
