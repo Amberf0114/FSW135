@@ -1,7 +1,7 @@
 const express = require('express')
 const commentRouter = express.Router()
 const comment = require('../models/comment.js')
-const issueRouter = require('./routes/issueRouter.js')
+const issueRouter = require('./issueRouter')
 
 
 commentRouter
@@ -64,6 +64,7 @@ commentRouter
     issueRouter
     
         .post("/:issueId", (req, res, next) => {
+            req.body.user = req.user._id
             const newComment = new comment(req.body)
             newComment.save((err, savedComment) => {
                 if (err){

@@ -14,6 +14,18 @@ issueRouter
         })
     })
 
+    .post("/:issueId", (req, res, next) => {
+        req.body.user = req.user._id
+        const newIssue = new Issue(req.body)
+        newIssue.save((err, savedIssue) => {
+            if (err){
+                res.status(500)
+                return console.log(err)
+            }
+            return res.status(201).send(savedIssue)
+        })
+    })
+
 
 issueRouter  
     //Get One Issue from the main page
