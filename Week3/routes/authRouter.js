@@ -18,15 +18,26 @@ authRouter
 
     // / Sign
     .post("/signup", (req, res, next) => {
-        auth.findOne({ username : req.body.username.toLowerCase() }, (err, user) => {
+        console.log(req.body)
+        auth.findOne({ email : req.body.email.toLowerCase() }, (err, user) => {
             if (err){
                 res.status(500)
                 return next(err)
             }
             if(user){
                 res.status(403)
-                return next (new Error('Username is Taken'))
+                return next (new Error('Email is Taken'))
             }
+            auth.findOne({ passcode : req.body.passcode }, (err, user) => {
+                if (err){
+                    res.status(500)
+                    return next(err)
+                }
+                if(user){
+                    res.status(403)
+                    return next (new Error('Passcode is Taken'))
+                }
+            // console.log(user)
             const newAuth = new auth(req.body)
             newAuth.save((err, savedAuth) => {
                 if (err){
@@ -34,24 +45,35 @@ authRouter
                     return console.log(err)
                 }
                 const token = jwt.sign(savedAuth.toObject(), process.env.SECRET)
-                return res.status(201).send({token, user: savedUser})
+                return res.status(201).send({token, user: savedAuth})
             })
         })
-
+    })
     })
 
     //Login
     authRouter.post("/login", (req,res, next) => {
-        auth.findOne({username: req.body.username.toLowerCase() }, (err,user) => {
+        auth.findOne({email: req.body.email.toLowerCase() }, (err,user) => {
             if(err){
                 res.status(500)
                 return next(err)
             }
-            if(!auth || req.body.passcode !== auth.passcode) {
+
+            console.log('auth: ', auth)
+            console.log('user: ', user)
+            console.log('user.passcode: ', user.passcode)
+
+            console.log('auth.passcode: ', auth.passcode)
+            console.log('req.body.passcode: ', req.body.passcode)
+
+            if(!auth || req.body.passcode !== user.passcode) {
                 res.status(403)
                 return next(new Error('Invalid Credentials'))
             }
             const token = jwt.sign(user.toObject(), process.env.SECRET)
+            console.log(token)
+            console.log(user)
+
             return res.status(200).send({token, user})
         })
     })

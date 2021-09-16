@@ -26,18 +26,18 @@ mongoose.connect('mongodb://localhost:27017/authdb',
 
 var PORT = 3001
 
-app.use('/api', expressJwt({secret: process.env.SECRET, algorithms: ['RS256']}))
+app.use('/secure', expressJwt({secret: process.env.SECRET, algorithms: ['HS256']}))
 app.use('/auth', authRouter)
-app.use('/comment', commentRouter)
-app.use('/issue', issueRouter)
+app.use('/secure/comment', commentRouter)
+app.use('/secure/issue', issueRouter)
 
 
 app.use((err, req, res, next) => {
   console.log(err)
-  if(err.name === "Unauthorized Error") {
+  if(err.name === "UnauthorizedError") {
     res.status(err.status)
   }
-  return res.send({errMsg: err.messge})
+  return res.send({errMsg: err.message})
 })
 app.listen(PORT, () => {
     console.log(`App started on ${PORT}`)
