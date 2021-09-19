@@ -44,8 +44,8 @@ authRouter
                     res.status(500)
                     return console.log(err)
                 }
-                const token = jwt.sign(savedAuth.toObject(), process.env.SECRET)
-                return res.status(201).send({token, user: savedAuth})
+                const token = jwt.sign(savedAuth.withoutpasscode(), process.env.SECRET)
+                return res.status(201).send({token, user: savedAuth.withoutpasscode()})
             })
         })
     })
@@ -53,28 +53,41 @@ authRouter
 
     //Login
     authRouter.post("/login", (req,res, next) => {
+        const failedLogin = 'Username or passcode is Incorrect'
         auth.findOne({email: req.body.email.toLowerCase() }, (err,user) => {
             if(err){
                 res.status(500)
                 return next(err)
             }
 
-            console.log('auth: ', auth)
-            console.log('user: ', user)
-            console.log('user.passcode: ', user.passcode)
+            // console.log('auth: ', auth)
+            // console.log('user: ', user)
+            // console.log('user.passcode: ', user.passcode)
 
-            console.log('auth.passcode: ', auth.passcode)
-            console.log('req.body.passcode: ', req.body.passcode)
+            // console.log('auth.passcode: ', auth.passcode)
+            // console.log('req.body.passcode: ', req.body.passcode)
 
-            if(!auth || req.body.passcode !== user.passcode) {
-                res.status(403)
-                return next(new Error('Invalid Credentials'))
-            }
-            const token = jwt.sign(user.toObject(), process.env.SECRET)
-            console.log(token)
-            console.log(user)
+            // if(!auth || req.body.passcode !== user.passcode) {
+            //     res.status(403)
+            //     return next(new Error('Invalid Credentials'))
+            // }
 
-            return res.status(200).send({token, user})
+            user.checkpasscode(req.body.passcode, (err, isMatched) => {
+                if (err) {
+                    res.status(403)
+                    return next(new Error(failedLogin))
+                }
+                if(!isMatched) {
+                    res.status(403)
+                    return next (new Error(failedLogin))
+                }
+                const token = jwt.sign(user.withoutpasscode(), process.env.SECRET)
+                console.log(token)
+                console.log(user)
+    
+                return res.status(200).send({token, user : user.withoutpasscode()})
+            })
+
         })
     })
 

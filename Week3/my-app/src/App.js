@@ -19,12 +19,12 @@ export default function App() {
 
         <Route
         exact path='/profile'
-        render={()=> <Profile/>}
+        render={()=>  !token ? <Redirect to='/'/> :  <Profile/>} 
         />
 
         <Route
         exact path='/issues'
-        render={()=> <Issues/>}
+        render={()=> !token ? <Redirect to='/'/> : <Issues/>}
         />
 
       </Switch>

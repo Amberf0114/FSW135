@@ -2,12 +2,21 @@ import React, {useState} from 'react'
 import axios from 'axios'
 export const UserContext = React.createContext()  //NOTE
 
+const userAxios = axios.create()
+userAxios.interceptors.request.use(config => {
+    const token = localStorage.getItem('token')
+    console.log("TOKEN",token)
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+})
+
 export default function UserProvider(props) {
     const initstate = {
         user: JSON.parse
         (localStorage.getItem('user')) || {}, 
         token: localStorage.getItem('token') || '',
-        issues: JSON.parse(localStorage.getItem('issues')) || []
+        // issues: JSON.parse(localStorage.getItem('issues')) || []
+        issues: []
     }
     const [userState, setuserState] = useState(initstate)
 
@@ -65,11 +74,12 @@ export default function UserProvider(props) {
 // Get issues here all
 
     function getIssues() {
-        axios.get('/secure/issue')
+        // axios.get('/secure/issue')
+        userAxios.get('/secure/issue')
         .then(res => {
             setuserState(prevUserState => ({
                 ...prevUserState,
-                issues: [prevUserState.issues, res.data]
+                issues: res.data
             }))
         })
         .catch (err => console.log(err.response.data.errMsg))
@@ -77,11 +87,19 @@ export default function UserProvider(props) {
 
 //add isssues by id (user)
     function addIssue(newIssue) {
-        axios.post('/secure/issue', newIssue)
-            .then(res => {
+        // axios.post('/secure/issue', newIssue)
+        //     .then(res => {
+        //         setuserState(prevUserState => ({
+        //             ...prevUserState,
+        //             issues: [prevUserState.issues, res.data]
+        //         }))
+        //     })
+        //     .catch (err => console.log(err.response.data.errMsg))
+        userAxios.post('/secure/issue', newIssue)
+           .then(res => {
                 setuserState(prevUserState => ({
                     ...prevUserState,
-                    issues: [prevUserState.issues, res.data]
+                    issues: [...prevUserState.issues, res.data]
                 }))
             })
             .catch (err => console.log(err.response.data.errMsg))

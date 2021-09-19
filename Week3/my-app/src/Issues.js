@@ -6,9 +6,44 @@ import { UserContext } from './context/userProvider'
 
 export default function Issues(props) {
 
-    const { issues } = useContext(UserContext)
+    const { title, description, issues } = props
 
-    console.log('issues: ', issues)
+
+
+    
+
+    //display purposes
+    return(
+
+        <div>
+            {/* <IssueForm addIssue = {issues} /> */}
+
+            <h1>Title: {title}</h1>
+            <p>Description: {description}</p>
+            {/* <p>{}</p> */}
+        </div>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//issue list to show all issues under issueform
+
 
     //const { addIssue } = useContext(UserContext)
     //const [inputs, setInputs] = useState(initInputs)
@@ -38,22 +73,3 @@ export default function Issues(props) {
     //     e.preventDefault()
     //     user(inputs)
     // }
-    
-
-    //display purposes
-    return(
-
-        <div>
-
-            {/*<button>Post</button> needs connected to user*/}
-
-            <IssueForm />
-
-            <h1>Title of Issue</h1>
-            <p>description of issue...</p>
-            <p>Author</p>
-        </div>
-    )
-}
-
-//issue list to show all issues under issueform
