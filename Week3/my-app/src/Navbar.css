@@ -1,0 +1,29 @@
+body {
+    margin: 0px;
+    margin-top: 0px;
+}
+
+.links{
+    
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around ;
+    font-size: xx-large;
+    background-color: rgba(10, 58, 160, 0.315);
+    padding: 1.5%;
+}
+
+a:link, a:visited, a:active {
+    text-decoration: none;
+    color: rgb(59, 59, 59);
+
+
+}
+
+a:hover{
+    color: rgb(46, 45, 45);
+    width: 100%;
+    text-shadow: 1px 1px;
+
+}
+

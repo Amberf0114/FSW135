@@ -5,11 +5,14 @@ export default function Form(props) {
     handleChange,
     handleSubmit,
     btnText,
+    errMsg,
     inputs: {
       email,
       passcode
     } 
   }= props
+
+    console.log('errMsg: ', errMsg)
 
     return (
       <form onSubmit={handleSubmit}>
@@ -30,7 +33,7 @@ export default function Form(props) {
         />
 
         <button> {btnText} </button>    
-
+        <p style ={{backgroundColor: "#c00000", color: "#ffffff", textAlign: "center"}}>{errMsg}</p>
       </form>
     );
   }

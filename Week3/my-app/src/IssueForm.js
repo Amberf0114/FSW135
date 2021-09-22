@@ -39,7 +39,7 @@ export default function IssueForm(props) {
     const { title, description } = inputs
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <input
                 type='text'
                 value={title}

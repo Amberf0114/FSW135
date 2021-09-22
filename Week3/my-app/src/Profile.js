@@ -11,7 +11,6 @@ export default function Profile(){
     return(
         <div className='profile'>
             {/* <h1> Hi, {auth}!</h1> */}
-            <button onClick={auth.logout}>Logout</button>
             <h3> Post an Issue</h3>
             <Form/>
             {/* <h3>{auth}'s Posts</h3> */}

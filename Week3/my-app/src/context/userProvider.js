@@ -16,10 +16,24 @@ export default function UserProvider(props) {
         (localStorage.getItem('user')) || {}, 
         token: localStorage.getItem('token') || '',
         // issues: JSON.parse(localStorage.getItem('issues')) || []
-        issues: []
+        issues: [],
+        errMsg: ''
     }
     const [userState, setuserState] = useState(initstate)
 
+    function handleAuthErr(errMsg){
+        setuserState(prevState => ({
+            ...prevState,
+            errMsg
+        }))
+    }
+
+    function resetAuthErr(){
+    setuserState(prevState => ({
+        ...prevState,
+        errMsg: ''
+    }))
+}
     function signup(credentials) {
         console.log(credentials)
         axios.post('/auth/signup', credentials) 
@@ -34,7 +48,7 @@ export default function UserProvider(props) {
                     token
                 }))
             })
-            .catch (err => console.log(err.response.data.errMsg))
+            .catch (err => handleAuthErr(err.response.data.errMsg))
     }
 
     function login(credentials) {
@@ -56,7 +70,7 @@ export default function UserProvider(props) {
                 token
             }))
         })
-        .catch (err => console.log(err.response.data.errMsg))
+        .catch (err => handleAuthErr(err.response.data.errMsg))
 
     }
 
@@ -107,7 +121,7 @@ export default function UserProvider(props) {
     
 
     return (
-        <UserContext.Provider value={ {...userState, signup, login, logout, addIssue} }>
+        <UserContext.Provider value={ {...userState, signup, login, logout, addIssue, resetAuthErr} }>
             {props.children}
         </UserContext.Provider>
     )
